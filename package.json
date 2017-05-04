@@ -1,0 +1,43 @@
+{
+  "name": "magnet-umzug",
+  "version": "0.1.0",
+  "description": "Magnet adapter for umzug",
+  "keywords": [
+    "magnet",
+    "magnetjs",
+    "umzug"
+  ],
+  "homepage": "https://github.com/magnetjs/magnet-umzug#readme",
+  "bugs": {
+    "url": "https://github.com/magnetjs/magnet-umzug/issues"
+  },
+  "author": "Kieve Chua <kievechua@gmail.com> (https://github.com/kievechua)",
+  "files": [
+    "README",
+    "CHANGELOG.md",
+    "dist"
+  ],
+  "main": "dist/index.js",
+  "repository": "magnetjs/magnet-umzug",
+  "scripts": {
+    "start": "fly",
+    "build": "fly build",
+    "dist": "npm run build && npm publish"
+  },
+  "dependencies": {
+    "magnet-core": "^3.9.0",
+    "umzug": "^1.12.0"
+  },
+  "devDependencies": {
+    "fly": "^2.0.6",
+    "fly-clear": "^1.0.1",
+    "fly-esnext": "^2.0.1",
+    "fly-flatten": "^1.0.1",
+    "fly-typescript": "^1.1.0",
+    "fly-watch": "^1.1.1"
+  },
+  "engines": {
+    "node": ">=6.9.5"
+  },
+  "license": "MIT"
+}
