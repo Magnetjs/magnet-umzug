@@ -10,11 +10,7 @@ export default class MagnetUmzug extends Module {
       for (const migrationType of ['migration', 'seeder']) {
         const storageOptions = {
           sequelize: this.app.sequelize,
-          modelName: ''
-        }
-
-        if (migrationType === 'seeder') {
-          storageOptions.modelName = 'SequelizeSeederMeta'
+          modelName: this.config[migrationType].modelName
         }
 
         await this.prepare(
