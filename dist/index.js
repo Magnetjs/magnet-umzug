@@ -16,9 +16,15 @@ class MagnetUmzug extends module_1.Module {
     setup() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                for (const migrationType of ['migration', 'seeder']) {
-                    const storageOptions = Object.assign({}, this.config[migrationType], { sequelize: this.app.sequelize });
-                    yield this.prepare(this.config[migrationType], storageOptions);
+                for (const config of this.config.tasks) {
+                    // const storageOptions = {
+                    //   ...this.config[migrationType],
+                    //   sequelize: this.app.sequelize
+                    // }
+                    yield this.prepare(config, this.config
+                    // this.config[migrationType],
+                    // storageOptions
+                    );
                 }
             }
             catch (err) {
@@ -26,28 +32,38 @@ class MagnetUmzug extends module_1.Module {
             }
         });
     }
-    prepare(config, storageOptions) {
+    // async prepare (config, storageOptions) {
+    prepare(lConfig, gConfig) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const path = `${this.app.config.baseDirPath}/${config.path}`;
-                const umzug = new Umzug({
-                    storage: 'sequelize',
-                    storageOptions,
-                    migrations: {
-                        params: [this.app, this.app.sequelize.getQueryInterface(), this.app.sequelize.constructor, function () {
-                                throw new Error('Migration tried to use old style "done" callback. Please upgrade to "umzug" and return a promise instead.');
-                            }],
-                        path,
-                        pattern: /\.js$/
-                    }
+                const config = Object.assign(gConfig, lConfig);
+                if (config.storage === 'sequelize' && config.storageOptions.magnet) {
+                    config.storageOptions.sequelize = this.app[config.storageOptions.magnet];
+                }
+                config.migrations.path = `${this.app.config.baseDirPath}/${config.migrations.path}`;
+                config.migrations.params = config.migrations.params || [this.app.sequelize.getQueryInterface(), this.app.sequelize.constructor, this.app, function () {
+                        throw new Error('Migration tried to use old style "done" callback. Please upgrade to "umzug" and return a promise instead.');
+                    }];
+                const umzug = new Umzug(config);
+                umzug.on('migrating', (...args) => {
+                    this.log.debug('migrating', args);
+                });
+                umzug.on('migrated', (...args) => {
+                    this.log.debug('migrated', args);
+                });
+                umzug.on('reverting', (...args) => {
+                    this.log.debug('reverting', args);
+                });
+                umzug.on('reverted', (...args) => {
+                    this.log.debug('reverted', args);
                 });
                 if (config.down) {
                     yield umzug.down(config.down);
-                    this.log.info(`${config.path} down complete!`);
+                    this.log.info(`${config.migrations.path} down complete!`);
                 }
                 if (config.up) {
                     yield umzug.up(config.up);
-                    this.log.info(`${config.path} up complete!`);
+                    this.log.info(`${config.migrations.path} up complete!`);
                 }
             }
             catch (err) {
