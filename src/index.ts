@@ -9,8 +9,8 @@ export default class MagnetUmzug extends Module {
     try {
       for (const migrationType of ['migration', 'seeder']) {
         const storageOptions = {
-          sequelize: this.app.sequelize,
-          modelName: this.config[migrationType].modelName
+          ...this.config[migrationType],
+          sequelize: this.app.sequelize
         }
 
         await this.prepare(
@@ -31,7 +31,7 @@ export default class MagnetUmzug extends Module {
         storage: 'sequelize',
         storageOptions,
         migrations: {
-          params: [this.app.sequelize.getQueryInterface(), this.app.sequelize.constructor, function () {
+          params: [this.app, this.app.sequelize.getQueryInterface(), this.app.sequelize.constructor, function () {
             throw new Error('Migration tried to use old style "done" callback. Please upgrade to "umzug" and return a promise instead.')
           }],
           path,

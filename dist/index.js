@@ -17,13 +17,7 @@ class MagnetUmzug extends module_1.Module {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 for (const migrationType of ['migration', 'seeder']) {
-                    const storageOptions = {
-                        sequelize: this.app.sequelize,
-                        modelName: ''
-                    };
-                    if (migrationType === 'seeder') {
-                        storageOptions.modelName = 'SequelizeSeederMeta';
-                    }
+                    const storageOptions = Object.assign({}, this.config[migrationType], { sequelize: this.app.sequelize });
                     yield this.prepare(this.config[migrationType], storageOptions);
                 }
             }
@@ -40,7 +34,7 @@ class MagnetUmzug extends module_1.Module {
                     storage: 'sequelize',
                     storageOptions,
                     migrations: {
-                        params: [this.app.sequelize.getQueryInterface(), this.app.sequelize.constructor, function () {
+                        params: [this.app, this.app.sequelize.getQueryInterface(), this.app.sequelize.constructor, function () {
                                 throw new Error('Migration tried to use old style "done" callback. Please upgrade to "umzug" and return a promise instead.');
                             }],
                         path,

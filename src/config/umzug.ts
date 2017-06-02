@@ -1,3 +1,5 @@
+// https://github.com/sequelize/umzug#configuration
+// https://github.com/sequelize/umzug#sequelizestorage
 export default {
   migration: {
     modelName: 'SequelizeMeta',
