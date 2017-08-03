@@ -1,6 +1,6 @@
 {
   "name": "magnet-umzug",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Magnet adapter for umzug",
   "keywords": [
     "magnet",
@@ -25,7 +25,7 @@
     "dist": "npm run build && npm publish"
   },
   "dependencies": {
-    "magnet-core": "^3.9.0",
+    "magnet-core": "^4.0.1",
     "umzug": "^2.0.1"
   },
   "devDependencies": {

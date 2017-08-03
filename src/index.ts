@@ -2,22 +2,17 @@ import { Module } from 'magnet-core/module'
 import * as Umzug from 'umzug'
 
 export default class MagnetUmzug extends Module {
-  get moduleName () { return 'umzug' }
-  get defaultConfig () { return __dirname }
+  init () {
+    this.moduleName = 'umzug'
+    this.defaultConfig = __dirname
+  }
 
   async setup () {
     try {
       for (const config of this.config.tasks) {
-        // const storageOptions = {
-        //   ...this.config[migrationType],
-        //   sequelize: this.app.sequelize
-        // }
-
         await this.prepare(
           config,
           this.config
-          // this.config[migrationType],
-          // storageOptions
         )
       }
     } catch (err) {
